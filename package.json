@@ -1,6 +1,6 @@
 {
 	"name": "quick-file-switch",
-	"version": "1.0.0",
+	"version": "1.0.2",
 	"description": "Obsidian plugin for quick file switching with custom shortcuts",
 	"main": "main.js",
 	"scripts": {
