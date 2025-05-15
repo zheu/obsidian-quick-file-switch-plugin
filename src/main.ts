@@ -1,4 +1,4 @@
-import { Plugin, TFile, Command, Notice } from "obsidian";
+import { Plugin, TFile, Command, Hotkey, Notice } from "obsidian";
 import { QuickFileSwitchSettingTab } from "./settings";
 
 // Interface for a single file shortcut
@@ -53,16 +53,19 @@ export default class QuickFileSwitchPlugin extends Plugin {
 			this.removeCommand(`open-file-${index}`);
 		});
 
-		// Register new shortcuts
+		// Register new shortcuts based on user input
 		this.settings.fileShortcuts.forEach(
 			({ filePath, shortcut }, index: number) => {
 				if (filePath && shortcut) {
+					// Parse shortcut string (e.g., "Alt+Shift+1")
+					const parts = shortcut.split("+");
+					const key = parts.pop() || ""; // Last part is the key (e.g., '1')
+					const modifiers = parts.map((part) => part.trim()); // All parts before the last are modifiers (e.g., ['Alt', 'Shift'])
+
 					const command: Command = {
 						id: `open-file-${index}`,
 						name: `Open file: ${filePath}`,
-						hotkeys: [
-							{ modifiers: ["Alt"], key: (index + 1).toString() },
-						],
+						hotkeys: [{ modifiers, key } as Hotkey],
 						callback: () => {
 							const file =
 								this.app.vault.getAbstractFileByPath(filePath);
